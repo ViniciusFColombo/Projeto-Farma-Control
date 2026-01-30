@@ -91,3 +91,7 @@
 #     for item in r.itens:
 #         print(f"  {item.medicamento.nome} - {item.quantidade} {item.unidade}")
  
+
+
+
+
