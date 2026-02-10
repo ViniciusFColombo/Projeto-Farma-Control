@@ -29,6 +29,10 @@ class Receita:
         self.data_ultima_retirada = datetime.now()
         self.calcular_proxima_data()
         
+    def alterar_retirada(self, nova_data):
+        self.data_ultima_retirada = nova_data
+        self.calcular_proxima_data()
+
     def calcular_proxima_data(self):
         self.proxima_data = self.data_ultima_retirada + timedelta(days = 30)
 

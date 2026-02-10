@@ -1,31 +1,44 @@
 from models.medicamento import Medicamento
-from repositories.medicamento_repo import medicamentos
+from repositories.medicamento_repo import buscar_medicamento_por_id
+from utils.filtros_pesquisas import listar_medicamento_por_nome
+from database.connection import get_connection
+from utils.formatacao import padronizar_nome
 
 def cadastrar_medicamento():
-    id = len (medicamentos) + 1
-    nome = input("Nome do medicamento: ")
+    nome = padronizar_nome(input("Nome do medicamento: "))
     dosagem = input("Dosagem do medicamento: ")
+    conn = get_connection()
+    cursor = conn.cursor()
 
-    medicamento = Medicamento(id, nome, dosagem)
-    medicamentos.append(medicamento)
-    print("Cadastro realizado com sucesso")
+    comando_sql = ("""INSERT INTO medicamento (nome, dosagem)
+                   VALUES (?, ?)""")
+    
+    cursor.execute(comando_sql, (nome, dosagem))
+    conn.commit()
+    conn.close()
+    print("Medicamento cadastrado com sucesso")
+
 
 def consultar_medicamento():
-    id = int (input("Insira o ID do medicamento: "))
-    for medicamento in medicamentos:
-        if medicamento.id == id:
-            print(f"ID: {medicamento.id}")
-            print(f"Nome: {medicamento.nome} - {medicamento.dosagem}")
-            return medicamento
-    print("Medicamento não encontrado")
-    return None
+    medicamento = listar_medicamento_por_nome()
+
+    return medicamento
+    
 
 def alterar_medicamento():
     medicamento = consultar_medicamento()
 
     if medicamento:
-        novo_nome = input("Novo nome: ")
+        novo_nome = padronizar_nome(input("Novo nome: "))
         nova_dosagem = input("Nova dosagem: ")
 
-        medicamento.alterar_dados(novo_nome, nova_dosagem)
-        print("Alterado com Sucesso")
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        comando_sql = ("""UPDATE medicamento SET nome = ?, dosagem = ?
+                       WHERE id = ?""")
+
+        cursor.execute(comando_sql, (novo_nome, nova_dosagem, medicamento.id))
+        conn.commit()
+        conn.close()
+        print("Medicamento alterado com sucesso!")
