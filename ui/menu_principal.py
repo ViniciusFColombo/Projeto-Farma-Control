@@ -1,7 +1,7 @@
 from ui.menu_cliente import menu_cliente
 from ui.menu_medico import menu_medico
 from ui.menu_medicamento import menu_medicamento
-from ui.menu_receita import menu_receita
+from ui.cadastro_receita import nova_receita
 
 
 def menu_principal():
@@ -10,7 +10,7 @@ def menu_principal():
         print("1 - Cliente")
         print("2 - Medico")
         print("3 - Medicamento")
-        print("4 - Receita")
+        print("4 - Cadastrar Receita")
         print("0 - Sair")
 
         opcao = input("Escolha: ")
@@ -23,7 +23,7 @@ def menu_principal():
             case "3":
                 menu_medicamento()
             case "4":
-                menu_receita()
+                nova_receita()
             case "0":
                 break
             case _:

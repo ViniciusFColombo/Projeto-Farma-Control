@@ -1,18 +1,27 @@
 from database.connection import get_connection
+from models.medico import Medico
 
-medicos = []
-
-def buscar_medico_por_id(id):
+def inserir_medico(nome, crm):
     conn = get_connection()
     cursor = conn.cursor()
 
-    comando_sql = ("SELECT * FROM medico WHERE id = ?")
+    comando_sql = ("""INSERT INTO medico (nome, crm)
+                   VALUES (?, ?)""")
     
-    cursor.execute(comando_sql, (id,))
-    row = cursor.fetchone()
-
+    cursor.execute(comando_sql, (nome, crm))
+    conn.commit()
     conn.close()
-    return row
+
+def atualizar_medico(novo_nome, novo_crm, medico):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    comando_sql = ("""UPDATE medico SET nome = ?, crm = ?
+                       WHERE id = ?""")
+
+    cursor.execute(comando_sql, (novo_nome, novo_crm, medico.id))
+    conn.commit()
+    conn.close()    
 
 def buscar_medico_por_nome(nome):
     conn = get_connection()
@@ -26,7 +35,16 @@ def buscar_medico_por_nome(nome):
     rows = cursor.fetchall()
 
     conn.close()
-    return rows
+
+    medicos =[]
+    for row in rows:
+        medico = Medico(
+            id=row[0],
+            nome=row[1],
+            crm=row[2]
+        )
+        medicos.append(medico)
+    return medicos
 
 def buscar_medico_por_crm(crm):
     conn = get_connection()
@@ -38,4 +56,14 @@ def buscar_medico_por_crm(crm):
     row = cursor.fetchone()
 
     conn.close()
-    return row
+   
+    if not row:
+        return None
+
+    medico = Medico(
+        id=row[0],
+        nome=row[1],
+        crm=row[2]
+    )
+
+    return medico
