@@ -2,6 +2,9 @@ from repositories.medicamento_repo import buscar_medicamento_por_nome, inserir_m
 
 
 def cadastrar_medicamento(nome, dosagem):
+    if not nome.strip():
+        raise ValueError("Nome não pode ser vazio.")
+
     inserir_medicamento(nome, dosagem)
     
 def consultar_medicamento(nome):

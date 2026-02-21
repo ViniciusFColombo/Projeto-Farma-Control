@@ -18,7 +18,11 @@ def nova_receita():
         return
 
     data_str = input("Data da receita (dd/mm/aaaa): ")
-    data_receita = datetime.strptime(data_str, "%d/%m/%Y")
+    try:
+        data_receita = datetime.strptime(data_str, "%d/%m/%Y")
+    except ValueError:
+        print("Data inválida.")
+        return
 
     itens = []
 
@@ -65,7 +69,7 @@ def nova_receita():
 
 
 def escolher_cliente():
-    opcao = int(input("Buscar por 1 - Nome ou 2 - CPF: "))
+    opcao = int(input("Buscar cliente por 1 - Nome ou 2 - CPF: "))
 
     if opcao == 1:
         nome = padronizar_nome(input("Nome: "))
@@ -90,7 +94,7 @@ def escolher_cliente():
 
 
 def escolher_medico():
-    opcao = int(input("Buscar por 1 - Nome ou 2 - CRM: "))
+    opcao = int(input("Buscar medico por 1 - Nome ou 2 - CRM: "))
 
     if opcao == 1:
         nome = padronizar_nome(input("Nome: "))

@@ -12,7 +12,7 @@ def inserir_medico(nome, crm):
     conn.commit()
     conn.close()
 
-def atualizar_medico(novo_nome, novo_crm, medico):
+def atualizar_medico(medico, novo_nome, novo_crm):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -50,7 +50,7 @@ def buscar_medico_por_crm(crm):
     conn = get_connection()
     cursor = conn.cursor()
 
-    comando_sql = ("SELECT * FROM medico WHERE crm = ?")
+    comando_sql = ("SELECT id, nome, crm FROM medico WHERE crm = ?")
 
     cursor.execute(comando_sql, (crm,))
     row = cursor.fetchone()

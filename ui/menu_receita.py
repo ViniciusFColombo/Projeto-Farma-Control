@@ -13,6 +13,7 @@ def menu_receita(cliente_id):
 
         if not receitas:
             print("Nenhuma receita encontrada.")
+            return None
         print("\n--- RECEITAS ---")
 
         for i, receita in enumerate(receitas):
@@ -36,7 +37,7 @@ def menu_receita(cliente_id):
                 num = int(input("Escolha a receita: "))
                 receita_escolhida = receitas[num - 1]
 
-                itens = consultar_medicamentos_por_receita(receita_escolhida)
+                itens = consultar_medicamentos_por_receita(receita_escolhida.id)
 
                 for i, item in enumerate(itens):
                     print("\n----------------------")
@@ -54,7 +55,11 @@ def menu_receita(cliente_id):
                 receita_escolhida = receitas[num - 1]
 
                 data_str = input("Informa a nova data de retirada (dd/mm/aaaa): ")
-                nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+                try:
+                    nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+                except ValueError:
+                    print("Data inválida.")
+                    return
 
                 alterar_retirada(receita_escolhida, nova_data)
 
@@ -76,7 +81,11 @@ def menu_alterar(receita_escolhida):
     match opcao:
         case "1":
             data_str = input("Informa a nova data (dd/mm/aaaa): ")
-            nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+            try:
+                nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+            except ValueError:
+                print("Data inválida.")
+                return
             alterar_data_receita(receita_escolhida, nova_data)
             print("Receita alterada com sucesso")
         
@@ -95,11 +104,12 @@ def menu_alterar(receita_escolhida):
 
                 escolha = int(input("Escolha o medico: ")) - 1
                 novo_medico = medicos[escolha]
-                alterar_medico_receita(receita_escolhida.id, novo_medico)
+                alterar_medico_receita(receita_escolhida, novo_medico)
                 print("Alterado com sucesso")
             elif opcao == 2:
-                novo_medico = somente_numeros(input("Informe o CRM do medico: "))
-                consultar_medico_por_crm(novo_medico)
+                crm = somente_numeros(input("Informe o CRM do medico: "))
+                novo_medico = consultar_medico_por_crm(crm)
+
                 alterar_medico_receita(receita_escolhida, novo_medico)
                 print("Alterado com sucesso")
             else:
@@ -122,20 +132,20 @@ def menu_alterar(receita_escolhida):
             print("Medicamento adicionado com sucesso")
 
         case "4":
-            itens = consultar_medicamentos_por_receita(receita_escolhida)
+            itens = consultar_medicamentos_por_receita(receita_escolhida.id)
 
             if not itens:
                 print("Nenhum item para remover")
                 return
 
             for i, item in enumerate(itens, start=1):
-                print(f"{i} - {item.medicamento.nome}")
+                print(f"{i} - {item.medicamento.nome} - {item.medicamento.dosagem}")
 
             escolha = int(input("Escolha o item para remover: ")) - 1
 
             item = itens[escolha]
 
-            remover_item_receita(receita_escolhida, item)
+            remover_item_receita(receita_escolhida.id, item.medicamento.id)
             print("Medicamento removido com sucesso")
 
         case "0":

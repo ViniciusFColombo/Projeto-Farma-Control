@@ -15,7 +15,7 @@ def inserir_cliente(nome, cpf, telefone):
     conn.commit()
     conn.close()
 
-def ataulizar_cliente(nome, cpf, telefone, status, cliente_id):
+def ataulizar_cliente(cliente_id, nome, cpf, telefone, status):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -75,7 +75,7 @@ def listar_cliente_por_nome(nome):
             status=bool(row[4])
         )
         clientes.append(cliente)
-        return clientes
+    return clientes
 
 def listar_cliente_por_cpf(cpf):
     conn = get_connection()

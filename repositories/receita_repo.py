@@ -60,16 +60,16 @@ def buscar_receita_cliente_id(cliente_id):
             id=row["id"],
             cliente=cliente,
             medico=medico,
-            data_receita=datetime.strptime(row["data_receita"], "%Y-%m-%d %H:%M:%S"),
+            data_receita=datetime.strptime(row["data_receita"], "%Y-%m-%d"),
             data_ultima_retirada=(
-                datetime.strptime(row["data_ultima_retirada"], "%Y-%m-%d %H:%M:%S")
+                datetime.strptime(row["data_ultima_retirada"], "%Y-%m-%d")
                 if row["data_ultima_retirada"] else None
             ),
             proxima_data=(
-                datetime.strptime(row["proxima_data_prevista"], "%Y-%m-%d %H:%M:%S")
+                datetime.strptime(row["proxima_data_prevista"], "%Y-%m-%d")
                 if row["proxima_data_prevista"] else None
             ),
-            status_vencida=bool(row["status"]),
+            status_vencida = True if int(row["status"]) == 1 else False,
             itens=[]
         )
 
