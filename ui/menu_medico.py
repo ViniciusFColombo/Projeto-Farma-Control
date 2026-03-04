@@ -17,8 +17,14 @@ def menu_medico():
                 try:
                     nome = padronizar_nome(input("Nome do medico: "))
                     crm = somente_numeros(input("CRM do medico: "))
-                    cadastrar_medico(nome, crm)
-                    print("Medico cadastrado com sucesso!")
+
+                    try:
+                        cadastrar_medico(nome, crm)
+                        print("Medico cadastrado com sucesso!")
+                    except Exception as e:
+                        print(str(e))
+                        return
+                    
                 except Exception as e:
                     print(f"Erro: {e}")
 
@@ -39,8 +45,14 @@ def menu_medico():
 
                     novo_nome = padronizar_nome(input("Novo nome: "))
                     novo_crm = somente_numeros(input("Novo CRM: "))
-                    alterar_medico(medico, novo_nome, novo_crm)
-                    print("Medico alterado com sucesso")
+
+                    try:
+                        alterar_medico(medico, novo_nome, novo_crm)
+                        print("Medico alterado com sucesso")
+                    except Exception as e:
+                        print(str(e))
+                        return
+                    
                 except Exception as e:
                     print(f"Erro: {e}")
 

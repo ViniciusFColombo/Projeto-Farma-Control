@@ -3,25 +3,35 @@ from models.medicamento import Medicamento
 
 def inserir_medicamento(nome, dosagem):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = ("""INSERT INTO medicamento (nome, dosagem)
-                   VALUES (?, ?)""")
-    
-    cursor.execute(comando_sql, (nome, dosagem))
-    conn.commit()
-    conn.close()
+        comando_sql = ("""INSERT INTO medicamento (nome, dosagem)
+                    VALUES (?, ?)""")
+        
+        cursor.execute(comando_sql, (nome, dosagem))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def atualizar_medicamento(novo_nome, nova_dosagem, medicamento):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = ("""UPDATE medicamento SET nome = ?, dosagem = ?
-                    WHERE id = ?""")
+        comando_sql = ("""UPDATE medicamento SET nome = ?, dosagem = ?
+                        WHERE id = ?""")
 
-    cursor.execute(comando_sql, (novo_nome, nova_dosagem, medicamento.id))
-    conn.commit()
-    conn.close()
+        cursor.execute(comando_sql, (novo_nome, nova_dosagem, medicamento.id))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def buscar_medicamento_por_nome(nome):
     conn = get_connection()

@@ -19,7 +19,7 @@ def nova_receita():
 
     data_str = input("Data da receita (dd/mm/aaaa): ")
     try:
-        data_receita = datetime.strptime(data_str, "%d/%m/%Y")
+        data_receita = datetime.strptime(data_str, "%d/%m/%Y").date()
     except ValueError:
         print("Data inválida.")
         return
@@ -41,7 +41,11 @@ def nova_receita():
             for i, med in enumerate(medicamentos, start=1):
                 print(f"{i} - {med.nome} {med.dosagem}")
 
-            escolha = int(input("Escolha o medicamento: "))
+            try:
+                escolha = int(input("Escolha o medicamento: "))
+            except ValueError:
+                print("Opção inválida.")
+                continue
             medicamento = medicamentos[escolha - 1]
 
         quantidade = int(input("Quantidade: "))
@@ -63,11 +67,13 @@ def nova_receita():
     if not itens:
         print("Nenhum medicamento foi adicionado.")
         return
-
-    cadastrar_receita(cliente, medico, data_receita, itens)
-    print("Receita cadastrada com sucesso!")
-
-
+    try:
+        cadastrar_receita(cliente, medico, data_receita, itens)
+        print("Receita cadastrada com sucesso!")
+    except Exception as e:
+        print(str(e))
+        return
+    
 def escolher_cliente():
     opcao = int(input("Buscar cliente por 1 - Nome ou 2 - CPF: "))
 

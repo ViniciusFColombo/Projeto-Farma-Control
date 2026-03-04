@@ -1,36 +1,49 @@
-from repositories.receita_repo import buscar_receita_cliente_id, inserir_receita, atualizar_data_receita, atualizar_medico_receita, atualizar_data_retirada
+from repositories.receita_repo import (
+    buscar_receita_cliente_id,
+    inserir_receita,
+    atualizar_data_receita,
+    atualizar_medico_receita,
+    atualizar_data_retirada
+)
+
 from datetime import datetime
+
 
 def cadastrar_receita(cliente, medico, data_receita, itens):
     if not data_receita:
         raise ValueError("Data da receita é obrigatória.")
 
-    if data_receita > datetime.now():
+    if data_receita > datetime.now().date():
         raise ValueError("Data da receita não pode ser no futuro.")
 
     if not itens:
         raise ValueError("Receita deve conter pelo menos um medicamento.")
-
-    inserir_receita(cliente, medico, data_receita, itens)
-
+    try:
+        inserir_receita(cliente, medico, data_receita, itens)
+    except Exception as e:
+        raise Exception("Erro ao cadastrar receita.") from e
 
 def consultar_receita(cliente_id):
     return buscar_receita_cliente_id(cliente_id)
 
 
 def alterar_medico_receita(receita, novo_medico):
-    atualizar_medico_receita(receita, novo_medico)
-
+    try:
+        atualizar_medico_receita(receita, novo_medico)
+    except Exception as e:
+        raise Exception("Erro ao alterar médico da receita.") from e
 
 def alterar_data_receita(receita, nova_data):
     if not nova_data:
         raise ValueError("Data da receita é obrigatória.")
 
-    if nova_data > datetime.now():
+    if nova_data > datetime.now().date():
         raise ValueError("Data da receita não pode ser no futuro.")
 
-    atualizar_data_receita(receita, nova_data)
-
+    try:
+        atualizar_data_receita(receita, nova_data)
+    except Exception as e:
+        raise Exception("Erro ao alterar data da receita.") from e
 
 def alterar_retirada(receita, nova_data):
     if not nova_data:
@@ -41,12 +54,13 @@ def alterar_retirada(receita, nova_data):
 
     receita.alterar_retirada(nova_data)
 
-    atualizar_data_retirada(
-        receita.id,
-        receita.data_ultima_retirada,
-        receita.proxima_data
-    )
-
-    return receita
-
+    try:
+        atualizar_data_retirada(
+            receita.id,
+            receita.data_ultima_retirada,
+            receita.proxima_data
+        )
+    except Exception as e:
+        raise Exception("Erro ao alterar a data da retirada.") from e
     
+    return receita

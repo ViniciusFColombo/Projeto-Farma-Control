@@ -3,32 +3,42 @@ from models.cliente import Cliente
 
 def inserir_cliente(nome, cpf, telefone):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = """
+        comando_sql = """
         INSERT INTO cliente (nome, cpf, telefone, status)
         VALUES (?, ?, ?, ?)
-    """
+         """
 
-    cursor.execute(comando_sql, (nome, cpf, telefone, 1))
+        cursor.execute(comando_sql, (nome, cpf, telefone, 1))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
-def ataulizar_cliente(cliente_id, nome, cpf, telefone, status):
+def atualizar_cliente(cliente_id, nome, cpf, telefone, status):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = """
-        UPDATE cliente
-        SET nome = ?, cpf = ?, telefone = ?, status = ?
-        WHERE id = ?
-    """
+        comando_sql = """
+            UPDATE cliente
+            SET nome = ?, cpf = ?, telefone = ?, status = ?
+            WHERE id = ?
+        """
 
-    cursor.execute(comando_sql, (nome, cpf, telefone, int(status), cliente_id))
+        cursor.execute(comando_sql, (nome, cpf, telefone, int(status), cliente_id))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def buscar_cliente_por_id(id):
     conn = get_connection()

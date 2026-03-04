@@ -9,12 +9,14 @@ def cadastrar_cliente(nome, cpf, telefone):
 
     if len(cpf) != 11:
         raise CPFInvalido("CPF deve conter 11 dígitos.")
-
+    
     cliente_existente = cliente_repo.listar_cliente_por_cpf(cpf)
     if cliente_existente:
         raise ClienteJaExiste("Já existe cliente com esse CPF.")
-
-    cliente_repo.inserir_cliente(nome, cpf, telefone)
+    try:
+        cliente_repo.inserir_cliente(nome, cpf, telefone)
+    except Exception as e:
+        raise Exception("Erro ao cadastrar usuário.") from e
 
 
 def buscar_cliente_por_nome(nome):
@@ -47,5 +49,8 @@ def alterar_cliente(cliente_id, nome, cpf, telefone, status):
 
     if cliente_existente and cliente_existente.id != cliente_id:
         raise ClienteJaExiste("Já existe outro cliente com esse CPF.")
-
-    cliente_repo.ataulizar_cliente(cliente_id, nome, cpf, telefone, status)
+    
+    try:
+        cliente_repo.atualizar_cliente(cliente_id, nome, cpf, telefone, status)
+    except Exception as e:
+        raise Exception("Erro ao atualizar usuário.") from e

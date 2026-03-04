@@ -3,16 +3,16 @@ class ListaDiaria:
         self.id = id
         self.data_lista = data_lista
         self.status = status
-        self.receitas = []
+        self.itens = []  
 
-    def adicionar_receita(self, receita):
-        self.receitas.append(receita)
+    def adicionar_item(self, item):
+        self.itens.append(item)
 
-    def confirmar(self):
-        self.status = "confirmada"
+    def listar_itens(self):
+        return self.itens
 
-    def pendente(self):
-        self.status = "pendente"
+    def fechar(self):
+        self.status = "FECHADA"
 
-    def listar_receitas(self):
-        return self.receitas
+    def abrir(self):
+        self.status = "ABERTA"

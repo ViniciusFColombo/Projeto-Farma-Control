@@ -56,7 +56,7 @@ def menu_receita(cliente_id):
 
                 data_str = input("Informa a nova data de retirada (dd/mm/aaaa): ")
                 try:
-                    nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+                    nova_data = datetime.strptime(data_str, "%d/%m/%Y").date()
                 except ValueError:
                     print("Data inválida.")
                     return
@@ -82,13 +82,18 @@ def menu_alterar(receita_escolhida):
         case "1":
             data_str = input("Informa a nova data (dd/mm/aaaa): ")
             try:
-                nova_data = datetime.strptime(data_str, "%d/%m/%Y")
+                nova_data = datetime.strptime(data_str, "%d/%m/%Y").date()
             except ValueError:
                 print("Data inválida.")
                 return
-            alterar_data_receita(receita_escolhida, nova_data)
-            print("Receita alterada com sucesso")
-        
+            
+            try:
+                alterar_data_receita(receita_escolhida, nova_data)
+                print("Receita alterada com sucesso")
+            except Exception as e:
+                print(str(e))
+                return
+                    
         case "2":
             opcao = int(input("Deseja procurar por 1 - Nome ou 2 - CRM: "))
             if opcao == 1:
@@ -104,14 +109,24 @@ def menu_alterar(receita_escolhida):
 
                 escolha = int(input("Escolha o medico: ")) - 1
                 novo_medico = medicos[escolha]
-                alterar_medico_receita(receita_escolhida, novo_medico)
-                print("Alterado com sucesso")
+                try:
+                    alterar_medico_receita(receita_escolhida, novo_medico)
+                    print("Alterado com sucesso")
+                except Exception as e:
+                    print(str(e))
+                    return
+                
             elif opcao == 2:
                 crm = somente_numeros(input("Informe o CRM do medico: "))
                 novo_medico = consultar_medico_por_crm(crm)
-
-                alterar_medico_receita(receita_escolhida, novo_medico)
-                print("Alterado com sucesso")
+                
+                try:
+                    alterar_medico_receita(receita_escolhida, novo_medico)
+                    print("Alterado com sucesso")
+                except Exception as e:
+                    print(str(e))
+                    return
+                
             else:
                 print("Opção invalida")
                 return
@@ -128,8 +143,12 @@ def menu_alterar(receita_escolhida):
             escolha = int(input("Escolha o medicamento: ")) - 1
             quantidade = int(input("Quantidade: "))
             unidade = input("Unidade: ")
-            inserir_item_receita(receita_escolhida.id, medicamentos[escolha].id, quantidade, unidade)
-            print("Medicamento adicionado com sucesso")
+            try:
+                inserir_item_receita(receita_escolhida.id, medicamentos[escolha].id, quantidade, unidade)
+                print("Medicamento adicionado com sucesso")
+            except Exception as e:
+                print(str(e))
+                return
 
         case "4":
             itens = consultar_medicamentos_por_receita(receita_escolhida.id)
@@ -145,9 +164,13 @@ def menu_alterar(receita_escolhida):
 
             item = itens[escolha]
 
-            remover_item_receita(receita_escolhida.id, item.medicamento.id)
-            print("Medicamento removido com sucesso")
-
+            try:
+                remover_item_receita(receita_escolhida.id, item.medicamento.id)
+                print("Medicamento removido com sucesso")
+            except Exception as e:
+                print(str(e))
+                return
+            
         case "0":
             return
 

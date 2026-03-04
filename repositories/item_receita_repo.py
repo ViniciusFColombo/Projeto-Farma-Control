@@ -46,32 +46,42 @@ def consultar_medicamentos_por_receita_id(receita_id):
 
 def adicionar_item_receita(receita_id, medicamento_id, quantidade, unidade):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = """
-        INSERT INTO receita_medicamento (receita_id, medicamento_id, quantidade, unidade)
-        VALUES (?, ?, ?, ?)
-    """
+        comando_sql = """
+            INSERT INTO receita_medicamento (receita_id, medicamento_id, quantidade, unidade)
+            VALUES (?, ?, ?, ?)
+        """
 
-    cursor.execute(
-        comando_sql,
-        (receita_id, medicamento_id, quantidade, unidade)
-    )
+        cursor.execute(
+            comando_sql,
+            (receita_id, medicamento_id, quantidade, unidade)
+        )
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def apagar_item_receita(receita_id, medicamento_id):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = """
-        DELETE FROM receita_medicamento
-        WHERE receita_id = ? AND medicamento_id = ?
-    """
+        comando_sql = """
+            DELETE FROM receita_medicamento
+            WHERE receita_id = ? AND medicamento_id = ?
+        """
 
-    cursor.execute(comando_sql, (receita_id, medicamento_id))
-    conn.commit()
-    conn.close()
+        cursor.execute(comando_sql, (receita_id, medicamento_id))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 

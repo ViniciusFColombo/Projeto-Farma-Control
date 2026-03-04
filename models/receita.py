@@ -1,4 +1,3 @@
-from models.cliente import Cliente
 from datetime import datetime
 from datetime import timedelta
 
@@ -14,19 +13,21 @@ class Receita:
         self.itens = itens
 
     def verificar_vencimento(self):
-        if ((self.data_receita + timedelta(days = 180)) < datetime.now()):
+        if (self.data_receita + timedelta(days=180)) < datetime.now().date():
             self.status_vencida = True
         else:
             self.status_vencida = False
 
     def ultimo_mes(self):
-        if (datetime.now() >= self.data_receita + timedelta(days = 150) and datetime.now() < self.data_receita + timedelta(days = 180)):
-           return True
+        hoje = datetime.now().date()
+        if (hoje >= self.data_receita + timedelta(days=150) and
+            hoje < self.data_receita + timedelta(days=180)):
+            return True
         else:
-           return False
+            return False
         
     def registrar_retirada(self):
-        self.data_ultima_retirada = datetime.now()
+        self.data_ultima_retirada = datetime.now().date()
         self.calcular_proxima_data()
         
     def alterar_retirada(self, nova_data):
@@ -34,10 +35,10 @@ class Receita:
         self.calcular_proxima_data()
 
     def calcular_proxima_data(self):
-        self.proxima_data = self.data_ultima_retirada + timedelta(days = 30)
+        self.proxima_data = self.data_ultima_retirada + timedelta(days=30)
 
     def pode_entrar_lista(self):
-       if (self.cliente.status and not self.status_vencida):
-           return True
-       else:
-           return False
+        if (self.cliente.status and not self.status_vencida):
+            return True
+        else:
+            return False

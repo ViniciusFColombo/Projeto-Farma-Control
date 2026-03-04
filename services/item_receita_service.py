@@ -12,12 +12,16 @@ def inserir_item_receita(receita_id, medicamento_id, quantidade, unidade):
     if not unidade.strip():
         raise ValueError("Unidade é obrigatória.")
 
-    adicionar_item_receita(receita_id, medicamento_id, quantidade, unidade)
-
+    try:
+        adicionar_item_receita(receita_id, medicamento_id, quantidade, unidade)
+    except Exception as e:
+        raise Exception("Erro ao adicionar item na receita.") from e
 
 def remover_item_receita(receita_id, medicamento_id):
-    apagar_item_receita(receita_id, medicamento_id)
-
+    try:
+     apagar_item_receita(receita_id, medicamento_id)
+    except Exception as e:
+        raise Exception("Erro ao criar lista diária.") from e
 
 
 

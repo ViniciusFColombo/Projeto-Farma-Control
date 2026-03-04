@@ -15,9 +15,13 @@ def menu_medicamento():
             case "1":
                 nome = padronizar_nome(input("Informe o nome do medicamento: "))
                 dosagem = input("Informe a dosagem (Ex: 20 mg): ")
-                cadastrar_medicamento(nome, dosagem)
-                print("Medicamento cadastrado com sucesso")
-
+                try:
+                    cadastrar_medicamento(nome, dosagem)
+                    print("Medicamento cadastrado com sucesso")
+                except Exception as e:
+                    print(str(e))
+                    return
+                
             case "2":
                 nome = padronizar_nome(input("Informe o nome do medicamento: "))
                 medicamentos = consultar_medicamento(nome)
@@ -51,9 +55,13 @@ def menu_medicamento():
                 novo_nome = padronizar_nome(input("Informe o novo nome: "))
                 nova_dosagem = input("Informe a nova dosagem (Ex: 20 mg): ")
 
-                alterar_medicamento(novo_nome, nova_dosagem, medicamento)
-                print("Medicamento alterado com sucesso")
-
+                try:
+                    alterar_medicamento(novo_nome, nova_dosagem, medicamento)
+                    print("Medicamento alterado com sucesso")
+                except Exception as e:
+                    print(str(e))
+                    return
+                
             case "0":
                 return
 

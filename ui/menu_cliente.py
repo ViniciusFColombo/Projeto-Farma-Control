@@ -20,9 +20,13 @@ def menu_cliente():
                     cpf = somente_numeros(input("CPF do cliente: "))
                     telefone = somente_numeros(input("Telefone do cliente: "))
 
-                    cadastrar_cliente(nome, cpf, telefone)
-                    print("Cliente cadastrado com sucesso!")
-
+                    try:
+                        cadastrar_cliente(nome, cpf, telefone)
+                        print("Cliente cadastrado com sucesso!")
+                    except Exception as e:
+                        print(str(e))
+                        return
+                    
                 except Exception as e:
                     print(f"Erro: {e}")
 
@@ -53,16 +57,20 @@ def menu_cliente():
 
                     novo_status = True if status_input == 1 else False
 
-                    alterar_cliente(
-                        cliente.id,
-                        novo_nome,
-                        novo_cpf,
-                        novo_telefone,
-                        novo_status
-                    )
+                    try:
+                        alterar_cliente(
+                            cliente.id,
+                            novo_nome,
+                            novo_cpf,
+                            novo_telefone,
+                            novo_status
+                        )
 
-                    print("Cliente atualizado com sucesso!")
-
+                        print("Cliente atualizado com sucesso!")
+                    except Exception as e:
+                        print(str(e))
+                        return
+                    
                 except Exception as e:
                     print(f"Erro: {e}")
 

@@ -3,25 +3,35 @@ from models.medico import Medico
 
 def inserir_medico(nome, crm):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = ("""INSERT INTO medico (nome, crm)
-                   VALUES (?, ?)""")
-    
-    cursor.execute(comando_sql, (nome, crm))
-    conn.commit()
-    conn.close()
+        comando_sql = ("""INSERT INTO medico (nome, crm)
+                    VALUES (?, ?)""")
+        
+        cursor.execute(comando_sql, (nome, crm))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def atualizar_medico(medico, novo_nome, novo_crm):
     conn = get_connection()
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    comando_sql = ("""UPDATE medico SET nome = ?, crm = ?
-                       WHERE id = ?""")
+        comando_sql = ("""UPDATE medico SET nome = ?, crm = ?
+                        WHERE id = ?""")
 
-    cursor.execute(comando_sql, (novo_nome, novo_crm, medico.id))
-    conn.commit()
-    conn.close()    
+        cursor.execute(comando_sql, (novo_nome, novo_crm, medico.id))
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()    
 
 def buscar_medico_por_nome(nome):
     conn = get_connection()
